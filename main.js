@@ -1,6 +1,8 @@
 img = "";
 rightWristY = 0;
 pingY = 325;
+game_status = "";
+status1 = "";
 
 var paddle2 =10,paddle1=10;
 
@@ -23,12 +25,12 @@ var ball = {
 }
 
 function setup(){
-  var canvas =  createCanvas(700,600);
+  canvas =  createCanvas(700,600);
   canvas.parent("canvas");
 
   video = createCapture(VIDEO);
   video.size(700, 600);
-  
+
   poseNet = ml5.poseNet(video, modelLoaded);
   poseNet.on('pose', poseWrist);	
 }
@@ -37,11 +39,11 @@ function modelLoaded() {
   console.log('Model Loaded!');
   }
   
-  function poseWrist(results)
+  function poseWrist(result)
   {
     if (result.length > 0)
     {
-        console.log(results);
+        console.log(result);
         console.log("rightWrist y position = "+result[0].pose.rightWrist.y);
         rightWristY= result[0].pose.rightWrist.y-18;
     }
@@ -52,10 +54,9 @@ function modelLoaded() {
     WristPRO = loadImage("https://i.postimg.cc/RVws1Zsy/clownnose.png");
   }
 
-function draw(){
-
+function draw(){ 
   background("#D3D3D3");
-    if(noseY > 150)
+    if(rightWristY > 150)
     {
       if(pingY < 330)
         {
@@ -63,16 +64,27 @@ function draw(){
         }
     }
   
-  if(noseY < 150)
+  if(rightWristY < 150)
     {
       if(pingY > 0)
         {
          pingY = pingY-1; 
         }
     }
+
+    function startGame()
+  {
+    game_status = "start";
+    document.getElementById("status").innerHTML = "Game is Loaded";
+  }
+
     
   image(img,pingX, pingY, 40,70);
   image(WristPRO , rightWristY, 20 , 20); 
+
+  if(gameConfig.status==='start'){
+    status1 = true;
+  }
 
  fill("black");
  stroke("black");

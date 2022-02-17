@@ -1,6 +1,8 @@
 img = "";
+pingY="";
 rightWristY = 0;
-pingY = 325;
+rightWristX = 0;
+score_right_wrist = 0;
 game_status = "";
 status1 = "";
 
@@ -44,8 +46,11 @@ function modelLoaded() {
     if (result.length > 0)
     {
         console.log(result);
-        console.log("rightWrist y position = "+result[0].pose.rightWrist.y);
+        console.log("rightWrist Y position = "+result[0].pose.rightWrist.y);
         rightWristY= result[0].pose.rightWrist.y-18;
+        console.log("rightWrist X position = "+result[0].pose.rightWrist.x);
+        rightWristX= result[0].pose.rightWrist.x-18;
+        scorerightwrist = result[0].pose.keypoints[10].score;
     }
   }
 
@@ -64,6 +69,13 @@ function draw(){
         }
     }
   
+    if(score_right_wrist > 0.2)
+  {
+    fill("orange");
+    stroke("orange");
+    circle(rightWristX, rightWristY, 30);
+  }
+
   if(rightWristY < 150)
     {
       if(pingY > 0)
@@ -79,7 +91,7 @@ function draw(){
   }
 
     
-  image(img,pingX, pingY, 40,70);
+  image(img,pingY, 40,70);
   image(WristPRO , rightWristY, 20 , 20); 
 
   if(gameConfig.status==='start'){
